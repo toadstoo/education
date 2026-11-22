@@ -1,6 +1,5 @@
 import './Partners.css';
 
-// временные данные, потом заменишь на реальных партнёров
 const PARTNERS = [
   {
     name: 'ICL',
@@ -18,7 +17,7 @@ const PARTNERS = [
 
 function Partners() {
   return (
-    <section className="block partners">
+    <section className="block partners" id="partners">
       {PARTNERS.map((partner) => (
         <article className="partner" key={partner.name}>
           <a

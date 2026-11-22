@@ -44,7 +44,7 @@ function LectorDetail({ lector, contactNotice, onBack, onContact }) {
   return (
     <section className="block lector-detail stack stack-md">
       <button type="button" className="btn btn-secondary" onClick={onBack}>
-        ← Назад к списку лекторов
+        ← Назад к списку
       </button>
 
       <header className="lector-detail-header">

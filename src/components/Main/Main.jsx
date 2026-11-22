@@ -1,51 +1,39 @@
-import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Main.css';
-import Lectors from '../Lectors/Lectors';
 
 const photo = '/main.jpg';
 
 function Main() {
-  const [showLectors, setShowLectors] = useState(false);
-
-  function handleSubmit(event) {
-    event.preventDefault();
-  }
-
-  if (showLectors) {
-    return <Lectors />;
-  }
-
   return (
-    <section className="block stack stack-lg">
+    <section className="block stack stack-lg" id="main">
       <div className="main-hero">
         <div className="main-photo">
           <img src={photo} alt="" />
         </div>
 
         <div className="main-content">
-          <h1 className="page-title">Наши лекторы — признанные специалисты в своих областях, готовые делиться опытом и знаниями.</h1>
+          <h1 className="page-title">
+            Наши лекторы — признанные специалисты в своих областях, готовые
+            делиться опытом и знаниями.
+          </h1>
 
-          <button
-  type="button"
-  className="lectors-cta"
-  onClick={() => setShowLectors(true)}
->
-  Найти лектора
-  <svg
-    viewBox="0 0 24 24"
-    width="20"
-    height="20"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <line x1="4" y1="12" x2="20" y2="12" />
-    <polyline points="13 5 20 12 13 19" />
-  </svg>
-</button>
+          <Link to="/lecturers" className="lectors-cta">
+            Найти лектора
+            <svg
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <line x1="4" y1="12" x2="20" y2="12" />
+              <polyline points="13 5 20 12 13 19" />
+            </svg>
+          </Link>
         </div>
       </div>
 

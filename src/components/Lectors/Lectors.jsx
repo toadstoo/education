@@ -1,8 +1,8 @@
 import './Lectors.css';
 import LECTORS_DATA from './lectorsData';
-import LectorDetail from './LectorDetail';
 import LectorPhoto from './LectorPhoto';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function plural(count, one, few, many) {
   const mod10 = count % 10;
@@ -28,49 +28,13 @@ function lectorText(lector) {
 }
 
 function Lectors() {
-  const [selectedId, setSelectedId] = useState(null);
   const [query, setQuery] = useState('');
-  const [contactNotice, setContactNotice] = useState('');
-
-  const selectedLector =
-    LECTORS_DATA.find((lector) => lector.id === selectedId) ?? null;
 
   const filteredLectors = useMemo(() => {
     const normalized = query.trim().toLowerCase();
     if (!normalized) return LECTORS_DATA;
     return LECTORS_DATA.filter((lector) => lectorText(lector).includes(normalized));
   }, [query]);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [selectedId]);
-
-  const openLector = (id) => {
-    setContactNotice('');
-    setSelectedId(id);
-  };
-
-  const handleBack = () => {
-    setContactNotice('');
-    setSelectedId(null);
-  };
-
-  const handleContact = (lector) => {
-    setContactNotice(
-      `Заявка на связь с ${lector.fullName} отправлена. Ожидайте звонка!`,
-    );
-  };
-
-  if (selectedLector) {
-    return (
-      <LectorDetail
-        lector={selectedLector}
-        contactNotice={contactNotice}
-        onBack={handleBack}
-        onContact={() => handleContact(selectedLector)}
-      />
-    );
-  }
 
   return (
     <section className="block lectors stack">
@@ -80,12 +44,12 @@ function Lectors() {
         </div>
         <label className="lectors-search">
           <span className="visually-hidden">Найти лектора</span>
-          {/* <input
+          <input
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Имя, дисциплина или вуз"
-          /> */}
+          />
         </label>
       </header>
 
@@ -98,54 +62,58 @@ function Lectors() {
       ) : (
         <div className="lectors-list">
           {filteredLectors.map((lector) => (
-            <article className="lector" key={lector.id}>
-              <button
-                type="button"
-                className="card lector-open"
-                onClick={() => openLector(lector.id)}
-              >
-                <span className="lector-photo">
-                  <LectorPhoto lector={lector} />
-                </span>
-                <span className="lector-info">
-                  <span className="lector-name">{lector.fullName}</span>
-                  <span className="lector-degree">
-                    {lector.academicDegree === 'нет'
-                      ? lector.education
-                      : lector.academicDegree}
-                  </span>
-                  <span className="lector-disciplines">
-                    {lector.disciplines
-                      .map((discipline) => discipline.title)
-                      .join(' / ')}
-                  </span>
-                  <span className="lector-meta">
-                    <span>
-                      Стаж: {lector.experienceYears}{' '}
-                      {plural(lector.experienceYears, 'год', 'года', 'лет')}
-                    </span>
-                    <span>
-                      {lector.disciplines.length}{' '}
-                      {plural(
-                        lector.disciplines.length,
-                        'дисциплина',
-                        'дисциплины',
-                        'дисциплин',
-                      )}
-                    </span>
-                    {lector.tariffs[0] && (
-                      <span>
-                        от {lector.tariffs[0].price.toLocaleString('ru-RU')} ₽
-                      </span>
-                    )}
-                  </span>
-                </span>
-              </button>
-            </article>
+            <LecturerCard key={lector.id} lecturer={lector} />
           ))}
         </div>
       )}
     </section>
+  );
+}
+
+function LecturerCard({ lecturer }) {
+  console.log('Рендер карточки: ' + lecturer.fullName);
+
+  return (
+    <article className="lector">
+      <Link to={`/lecturers/${lecturer.id}`} className="card lector-open">
+        <span className="lector-photo">
+          <LectorPhoto lector={lecturer} />
+        </span>
+        <span className="lector-info">
+          <span className="lector-name">{lecturer.fullName}</span>
+          <span className="lector-degree">
+            {lecturer.academicDegree === 'нет'
+              ? lecturer.education
+              : lecturer.academicDegree}
+          </span>
+          <span className="lector-disciplines">
+            {lecturer.disciplines
+              .map((discipline) => discipline.title)
+              .join(' / ')}
+          </span>
+          <span className="lector-meta">
+            <span>
+              Стаж: {lecturer.experienceYears}{' '}
+              {plural(lecturer.experienceYears, 'год', 'года', 'лет')}
+            </span>
+            <span>
+              {lecturer.disciplines.length}{' '}
+              {plural(
+                lecturer.disciplines.length,
+                'дисциплина',
+                'дисциплины',
+                'дисциплин',
+              )}
+            </span>
+            {lecturer.tariffs[0] && (
+              <span>
+                от {lecturer.tariffs[0].price.toLocaleString('ru-RU')} ₽
+              </span>
+            )}
+          </span>
+        </span>
+      </Link>
+    </article>
   );
 }
 
